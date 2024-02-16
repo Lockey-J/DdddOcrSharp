@@ -28,7 +28,7 @@ namespace DdddOcrSharp
 #if DEBUG
             Console.WriteLine($"欢迎使用ddddocr，本项目专注带动行业内卷");
             Console.WriteLine($"python版开发作者：https://github.com/sml2h3/ddddocr");
-            Console.WriteLine($"C#/NET版移植作者：https://github.com/itbencn/DdddOcr.Net");
+            Console.WriteLine($"C#/NET版移植作者：https://github.com/Lockey-J/DdddOcrSharp");
             Console.WriteLine($"本项目仅作为移植项目未经过大量测试 生产环境谨慎使用");
             Console.WriteLine($"请勿违反所在地区法律法规 合理合法使用本项目");
 #endif
@@ -74,7 +74,7 @@ namespace DdddOcrSharp
 #if DEBUG
             Console.WriteLine($"欢迎使用ddddocr，本项目专注带动行业内卷");
             Console.WriteLine($"python版开发作者：https://github.com/sml2h3/ddddocr");
-            Console.WriteLine($"C#/NET版移植作者：https://github.com/itbencn/DdddOcr.Net");
+            Console.WriteLine($"C#/NET版移植作者：https://github.com/Lockey-J/DdddOcrSharp");
             Console.WriteLine($"请合理合法使用本项目 本项目未经过大量测试 生产环境谨慎使用");
 #endif
             Mode = DdddOcrMode.Import;
@@ -548,11 +548,11 @@ namespace DdddOcrSharp
             Mat res = new();
             Cv2.MatchTemplate(background, target, res, TemplateMatchModes.CCoeffNormed);
             Cv2.MinMaxLoc(res, out _, out _, out _, out Point maxLoc);
-            var mRect = new Rect(maxLoc, target.Size());
-            if (targetPoint != default)
-            {
-                mRect.Add(new Size(mRect.Width, target_y - 1));
-            }
+            var mRect = new Rect(maxLoc.X, target_y, target.Width,target.Height);
+            //if (targetPoint != default)
+            //{
+            //    //mRect = mRect.Add(new Size(0, target_y - 1));
+            //}
             return (targetPoint.Y, mRect);
         }
 

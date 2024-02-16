@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34511.84
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DdddOcrSharp", "DdddOcrSharp\DdddOcrSharp.csproj", "{6597B312-A532-4E40-82B3-D92B9452EB88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DdddOcrSharp.Demo", "DdddOcrSharp.Demo\DdddOcrSharp.Demo.csproj", "{70B0A693-550A-4CBE-9BB5-7738CBDD4DCF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6597B312-A532-4E40-82B3-D92B9452EB88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6597B312-A532-4E40-82B3-D92B9452EB88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6597B312-A532-4E40-82B3-D92B9452EB88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6597B312-A532-4E40-82B3-D92B9452EB88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70B0A693-550A-4CBE-9BB5-7738CBDD4DCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70B0A693-550A-4CBE-9BB5-7738CBDD4DCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70B0A693-550A-4CBE-9BB5-7738CBDD4DCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70B0A693-550A-4CBE-9BB5-7738CBDD4DCF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F23C9D32-E4B0-4A7A-8B89-869738486F52}
+	EndGlobalSection
+EndGlobal

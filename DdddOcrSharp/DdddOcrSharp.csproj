@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>DdddOcrSharp</Title>
+    <Description>ddddocr的c#版本支持classification 分类/OCR识别/文字识别，detection 目标检测，slide_match 滑块，slide_comparison 滑块</Description>
+    <PackageProjectUrl>https://github.com/Lockey-J/DdddOcrSharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Lockey-J/DdddOcrSharp.git</RepositoryUrl>
+    <Version>1.4.11</Version>
+    <Authors>Lockey</Authors>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ddddocr;带带弟弟;验证码识别</PackageTags>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.12.1" />
+    <PackageReference Include="OpenCvSharp4.Windows" Version="4.9.0.20240103" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="onnxs\common.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="onnxs\common_det.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="onnxs\common_old.onnx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.ML.OnnxRuntime.Tensors;
+using System.Diagnostics;
 using System.Text;
 
 namespace DdddOcrSharp
@@ -26,11 +27,11 @@ namespace DdddOcrSharp
         public DDDDOCR(DdddOcrMode mode, bool use_gpu = false, int device_id = 0)
         {
 #if DEBUG
-            Console.WriteLine($"欢迎使用ddddocr，本项目专注带动行业内卷");
-            Console.WriteLine($"python版开发作者：https://github.com/sml2h3/ddddocr");
-            Console.WriteLine($"C#/NET版移植作者：https://github.com/Lockey-J/DdddOcrSharp");
-            Console.WriteLine($"本项目仅作为移植项目未经过大量测试 生产环境谨慎使用");
-            Console.WriteLine($"请勿违反所在地区法律法规 合理合法使用本项目");
+            Trace.WriteLine($"欢迎使用ddddocr，本项目专注带动行业内卷");
+            Trace.WriteLine($"python版开发作者：https://github.com/sml2h3/ddddocr");
+            Trace.WriteLine($"C#/NET版移植作者：https://github.com/Lockey-J/DdddOcrSharp");
+            Trace.WriteLine($"本项目仅作为移植项目未经过大量测试 生产环境谨慎使用");
+            Trace.WriteLine($"请勿违反所在地区法律法规 合理合法使用本项目");
 #endif
             if (!Enum.IsDefined(mode))
             {
@@ -72,10 +73,10 @@ namespace DdddOcrSharp
         public DDDDOCR(string import_onnx_path, string charsets_path, bool use_gpu = false, int device_id = 0)
         {
 #if DEBUG
-            Console.WriteLine($"欢迎使用ddddocr，本项目专注带动行业内卷");
-            Console.WriteLine($"python版开发作者：https://github.com/sml2h3/ddddocr");
-            Console.WriteLine($"C#/NET版移植作者：https://github.com/Lockey-J/DdddOcrSharp");
-            Console.WriteLine($"请合理合法使用本项目 本项目未经过大量测试 生产环境谨慎使用");
+            Trace.WriteLine($"欢迎使用ddddocr，本项目专注带动行业内卷");
+            Trace.WriteLine($"python版开发作者：https://github.com/sml2h3/ddddocr");
+            Trace.WriteLine($"C#/NET版移植作者：https://github.com/Lockey-J/DdddOcrSharp");
+            Trace.WriteLine($"请合理合法使用本项目 本项目未经过大量测试 生产环境谨慎使用");
 #endif
             Mode = DdddOcrMode.Import;
             if (!File.Exists(import_onnx_path))

@@ -8,7 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DdddOcrSharp\DdddOcrSharp.csproj" />
+    <PackageReference Include="DdddOcr.Net" Version="0.24.116" />
+    <PackageReference Include="DdddOcrSharp" Version="1.4.12" />
   </ItemGroup>
 
   <ItemGroup>

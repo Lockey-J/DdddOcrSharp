@@ -9,12 +9,13 @@
     <Description>ddddocr的c#版本支持classification 分类/OCR识别/文字识别，detection 目标检测，slide_match 滑块，slide_comparison 滑块</Description>
     <PackageProjectUrl>https://github.com/Lockey-J/DdddOcrSharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Lockey-J/DdddOcrSharp.git</RepositoryUrl>
-    <Version>1.4.11</Version>
+    <Version>1.4.12</Version>
     <Authors>Lockey</Authors>
     <RepositoryType>git</RepositoryType>
     <PackageTags>ddddocr;带带弟弟;验证码识别</PackageTags>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,5 +39,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
+ 
 </Project>

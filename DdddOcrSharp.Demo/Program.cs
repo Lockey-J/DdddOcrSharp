@@ -35,7 +35,7 @@ namespace DdddOcr.Demo
             }
 
             Cv2.ImShow("det", det);
-            Console.WriteLine("目标识别到的坐标为：" + JsonSerializer.Serialize<List<Rect>>(Detresult));
+            Console.WriteLine("目标识别到的坐标为：" + JsonSerializer.Serialize(Detresult));
             Console.WriteLine("\r\n");
 
             var (target_y, rect) = DDDDOCR.SlideMatch(tg, bg,60);

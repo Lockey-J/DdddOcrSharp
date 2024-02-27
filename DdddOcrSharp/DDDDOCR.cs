@@ -500,16 +500,17 @@ namespace DdddOcrSharp
         /// </summary>
         /// <param name="targetMat">滑块图片</param>
         /// <param name="backgroundMat">带缺口背景图片</param>
+        /// <param name="target_y">缺口Y轴坐标</param>
         /// <param name="simpleTarget"></param>
         /// <param name="flag">报错标识</param>
         /// <returns></returns>
 
-        public static (int, Rect) SlideMatch(Mat targetMat, Mat backgroundMat, bool simpleTarget = false, bool flag = false)
+        public static (int, Rect) SlideMatch(Mat targetMat, Mat backgroundMat,int target_y=0, bool simpleTarget = false, bool flag = false)
         {
             Mat target;
-            int target_y = 0;
+            
             Point targetPoint = default;
-
+            int mTarget_Y = 0;
             if (!simpleTarget)
             {
                 try
@@ -523,7 +524,7 @@ namespace DdddOcrSharp
                     {
                         throw;
                     }
-                    return SlideMatch(targetMat, backgroundMat, true, true);
+                    return SlideMatch(targetMat, backgroundMat,0, true, true);
                 }
             }
             else
@@ -535,26 +536,28 @@ namespace DdddOcrSharp
 
             if (targetPoint != default)
             {
-                target_y = targetPoint.Y;
-                background = background.Clone(new Rect(0, target_y - 1, backgroundMat.Width, backgroundMat.Height - target_y + 1));
+                mTarget_Y = targetPoint.Y+ target_y-1;
+                background = background.Clone(new Rect(0, mTarget_Y, backgroundMat.Width, backgroundMat.Height - target_y ));
             }
             Mat cbackground = new();
             Mat ctarget = new();
+            background = background.GaussianBlur(new Size(3, 3), 3).CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(128,255,ThresholdTypes.Binary);
+            target= target.GaussianBlur(new Size(3, 3), 3).CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(128, 255, ThresholdTypes.Binary);
+            //Cv2.ImShow("background", background);
+            //Cv2.ImShow("target", target);
+            //Cv2.WaitKey(0);
             Cv2.Canny(background, cbackground, 100, 200);
             Cv2.Canny(target, ctarget, 100, 200);
-
+            
             Cv2.CvtColor(cbackground, background, ColorConversionCodes.GRAY2BGR);
             Cv2.CvtColor(ctarget, target, ColorConversionCodes.GRAY2BGR);
 
             Mat res = new();
             Cv2.MatchTemplate(background, target, res, TemplateMatchModes.CCoeffNormed);
             Cv2.MinMaxLoc(res, out _, out _, out _, out Point maxLoc);
-            var mRect = new Rect(maxLoc.X, target_y, target.Width,target.Height);
-            //if (targetPoint != default)
-            //{
-            //    //mRect = mRect.Add(new Size(0, target_y - 1));
-            //}
-            return (targetPoint.Y, mRect);
+            var mRect = new Rect(maxLoc.X, mTarget_Y, target.Width,target.Height);
+     
+            return (mTarget_Y , mRect);
         }
 
 

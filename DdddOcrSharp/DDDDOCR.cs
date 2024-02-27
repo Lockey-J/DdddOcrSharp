@@ -508,7 +508,7 @@ namespace DdddOcrSharp
         public static (int, Rect) SlideMatch(Mat targetMat, Mat backgroundMat,int target_y=0, bool simpleTarget = false, bool flag = false)
         {
             Mat target;
-            
+            Mat lockTarget;
             Point targetPoint = default;
             int mTarget_Y = 0;
             if (!simpleTarget)
@@ -531,7 +531,7 @@ namespace DdddOcrSharp
             {
                 target = Cv2.ImDecode(targetMat.ImEncode(), ImreadModes.AnyColor);
             }
-
+            lockTarget = target;
             Mat background = Cv2.ImDecode(backgroundMat.ImEncode(), ImreadModes.AnyColor);
 
             if (targetPoint != default)
@@ -541,21 +541,21 @@ namespace DdddOcrSharp
             }
             Mat cbackground = new();
             Mat ctarget = new();
-            background = background.GaussianBlur(new Size(3, 3), 3).CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(128,255,ThresholdTypes.Binary);
-            target= target.GaussianBlur(new Size(3, 3), 3).CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(128, 255, ThresholdTypes.Binary);
-            //Cv2.ImShow("background", background);
-            //Cv2.ImShow("target", target);
-            //Cv2.WaitKey(0);
+            background = background.GaussianBlur(new Size(3, 3), 3).CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(128,255,ThresholdTypes.Binary );
+            target= target.GaussianBlur(new Size(3, 3), 3).CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(128, 255, ThresholdTypes.Binary );
+       
             Cv2.Canny(background, cbackground, 100, 200);
             Cv2.Canny(target, ctarget, 100, 200);
             
             Cv2.CvtColor(cbackground, background, ColorConversionCodes.GRAY2BGR);
             Cv2.CvtColor(ctarget, target, ColorConversionCodes.GRAY2BGR);
-
+            //Cv2.ImShow("background", background);
+            //Cv2.ImShow("target", target);
+            //Cv2.WaitKey(0);
             Mat res = new();
             Cv2.MatchTemplate(background, target, res, TemplateMatchModes.CCoeffNormed);
             Cv2.MinMaxLoc(res, out _, out _, out _, out Point maxLoc);
-            var mRect = new Rect(maxLoc.X, mTarget_Y, target.Width,target.Height);
+            var mRect = new Rect(maxLoc.X, mTarget_Y, lockTarget.Width, lockTarget.Height);
      
             return (mTarget_Y , mRect);
         }
@@ -612,7 +612,6 @@ namespace DdddOcrSharp
                             }
                             else
                             {
-
                                 endynext = y;
                             }
                         }
@@ -635,7 +634,7 @@ namespace DdddOcrSharp
                 }
             }
 
-            var rect = new Rect(starttx, startty, endX - starttx, endY - startty);
+            var rect = new Rect(starttx, startty, endX - starttx+1, endY - startty+1);
             return (image.Clone(rect), new Point(starttx, startty));
             //}
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.ML.OnnxRuntime.Tensors;
+using OpenCvSharp;
 using System.Diagnostics;
 using System.Text;
 
@@ -531,25 +532,27 @@ namespace DdddOcrSharp
             {
                 target = Cv2.ImDecode(targetMat.ImEncode(), ImreadModes.AnyColor);
             }
+           
             lockTarget = target;
             Mat background = Cv2.ImDecode(backgroundMat.ImEncode(), ImreadModes.AnyColor);
 
             if (targetPoint != default)
             {
                 mTarget_Y = targetPoint.Y+ target_y-1;
-                background = background.Clone(new Rect(0, mTarget_Y, backgroundMat.Width, backgroundMat.Height - target_y ));
+                background = background.Clone(new Rect(0, mTarget_Y, backgroundMat.Width, backgroundMat.Height - mTarget_Y));
             }
             Mat cbackground = new();
             Mat ctarget = new();
             background = background.GaussianBlur(new Size(3, 3), 3).CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(128,255,ThresholdTypes.Binary );
-            target= target.GaussianBlur(new Size(3, 3), 3).CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(128, 255, ThresholdTypes.Binary );
-       
-            Cv2.Canny(background, cbackground, 100, 200);
-            Cv2.Canny(target, ctarget, 100, 200);
-            
+            target= target.GaussianBlur(new Size(3, 3), 3).CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(128, 255, ThresholdTypes.Binary);
+
+            Cv2.Canny(background, cbackground, 100, 300);
+            Cv2.Canny(target, ctarget, 100, 300);
+
+          
             Cv2.CvtColor(cbackground, background, ColorConversionCodes.GRAY2BGR);
             Cv2.CvtColor(ctarget, target, ColorConversionCodes.GRAY2BGR);
-            //Cv2.ImShow("background", background);
+            Cv2.ImShow("background", background);
             //Cv2.ImShow("target", target);
             //Cv2.WaitKey(0);
             Mat res = new();
@@ -568,74 +571,101 @@ namespace DdddOcrSharp
         /// <returns></returns>
         public static (Mat, Point) GetTarget(Mat image)
         {
-
-            //using (var ms = new MemoryStream(imgBytes))
-            //{
-            //    var image = Mat.FromStream(ms, ImreadModes.AnyColor);
-
-            int w = image.Width, h = image.Height;
-            int starttx = 0, startty = 0, endX = 0, endY = 0, endynext = 0, endxnext = 0;
-
-            for (int x = 0; x < w; x++)
+            Mat Result=new();
+            Point point = new Point();
+            //image.GaussianBlur(new OpenCvSharp.Size(5, 5), 0.8, 0.8, BorderTypes.Reflect101);
+            Mat bw = new Mat();                                         // 二值化后的图像,距离变换后就没用到了
+            //Cv2.CvtColor(image, bw, ColorConversionCodes.BGR2GRAY); // 锐化后的图像转灰度
+            bw=image.GaussianBlur(new Size(3, 3), 3).CvtColor(ColorConversionCodes.BGR2GRAY).Threshold(128, 255, ThresholdTypes.Binary);
+            Mat ctarget = new();
+            Cv2.Canny(bw, ctarget, 100, 300);
+            Cv2.ImShow("Canny Contours", ctarget);
+            OpenCvSharp.Point[][] contours;
+            Cv2.FindContours(ctarget, out contours, out _, RetrievalModes.External, ContourApproximationModes.ApproxSimple);
+            // 筛选矩形轮廓
+            foreach (var contour in contours)
             {
-                for (int y = 0; y < h; y++)
+               
+                var rect = Cv2.BoundingRect(contour);
+                if( Convert.ToDouble(rect.Width)/image.Width > 0.5)
                 {
-                    var p = image.Get<Vec3b>(y, x);
-
-                    if (p.Item2 == 0)
-                    {
-                        if (startty != 0 && endY < endynext)
-                        {
-                            endY = endynext;
-                        }
-
-                        if (starttx != 0 && endxnext > endX)
-                        {
-                            endX = endxnext;
-                        }
-                    }
-                    else
-                    {
-                        if (startty == 0)
-                        {
-                            startty = y;
-
-                            endY = 0;
-                        }
-                        else
-                        {
-                            if (y < startty)
-                            {
-                                startty = y;
-                                endynext = 0;
-                                endY = 0;
-                            }
-                            else
-                            {
-                                endynext = y;
-                            }
-                        }
-                        if (starttx != 0 && endxnext < x)
-                        {
-                            endxnext = x;
-                        }
-
-                    }
-
+                    Result = image.Clone(rect);
+                    point.X=rect.X; point.Y=rect.Y;
+                    image.Rectangle(rect, new Scalar(0, 0, 255), 1);
+                    Cv2.ImShow("ss", image);
+                    //break;
                 }
-                if (starttx == 0 && startty != 0)
+                else
                 {
-                    starttx = x;
-                }
-
-                if (endY != 0 && endxnext > endX)
-                {
-                    endX = endxnext;
+                    //break;
                 }
             }
+           
+            Cv2.WaitKey(3000);
+            return (Result, point);
+            //int w = image.Width, h = image.Height;
+            //int starttx = 0, startty = 0, endX = 0, endY = 0, endynext = 0, endxnext = 0;
 
-            var rect = new Rect(starttx, startty, endX - starttx+1, endY - startty+1);
-            return (image.Clone(rect), new Point(starttx, startty));
+            //for (int x = 0; x < w; x++)
+            //{
+            //    for (int y = 0; y < h; y++)
+            //    {
+            //        var p = image.Get<Vec3b>(y, x);
+
+            //        if (p.Item2 == 0)
+            //        {
+            //            if (startty != 0 && endY < endynext)
+            //            {
+            //                endY = endynext;
+            //            }
+
+            //            if (starttx != 0 && endxnext > endX)
+            //            {
+            //                endX = endxnext;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            if (startty == 0)
+            //            {
+            //                startty = y;
+
+            //                endY = 0;
+            //            }
+            //            else
+            //            {
+            //                if (y < startty)
+            //                {
+            //                    startty = y;
+            //                    endynext = 0;
+            //                    endY = 0;
+            //                }
+            //                else
+            //                {
+            //                    endynext = y;
+            //                }
+            //            }
+            //            if (starttx != 0 && endxnext < x)
+            //            {
+            //                endxnext = x;
+            //            }
+
+            //        }
+
+            //    }
+            //    if (starttx == 0 && startty != 0)
+            //    {
+            //        starttx = x;
+            //    }
+
+            //    if (endY != 0 && endxnext > endX)
+            //    {
+            //        endX = endxnext;
+            //    }
+            //}
+
+            //var rect = new Rect(starttx, startty, endX - starttx+1, endY - startty+1);
+            //return (image.Clone(rect), new Point(starttx, startty));
             //}
         }
         #endregion

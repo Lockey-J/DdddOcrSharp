@@ -9,8 +9,8 @@ namespace DdddOcr.Demo
     {
         static void Main(string[] args)
         {
-            Mat tg = new("tg2.png", ImreadModes.AnyColor);
-            Mat bg = new("bg2.png", ImreadModes.AnyColor);
+            Mat tg = new("tg1.png", ImreadModes.AnyColor);
+            Mat bg = new("bg1.png", ImreadModes.AnyColor);
             Mat ocr = new("ocr.jpg", ImreadModes.AnyColor);
             Mat det = new("det.png", ImreadModes.AnyColor);
 

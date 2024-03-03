@@ -9,8 +9,8 @@ namespace DdddOcr.Demo
     {
         static void Main(string[] args)
         {
-            Mat tg = new("tg3.png", ImreadModes.AnyColor);
-            Mat bg = new("bg3.png", ImreadModes.AnyColor);
+            Mat tg = new("tg1.png", ImreadModes.AnyColor);
+            Mat bg = new("bg1.png", ImreadModes.AnyColor);
             Mat ocr = new("ocr.jpg", ImreadModes.AnyColor);
             Mat det = new("det.png", ImreadModes.AnyColor);
 
@@ -37,8 +37,8 @@ namespace DdddOcr.Demo
             Cv2.ImShow("det", det);
             Console.WriteLine("目标识别到的坐标为：" + JsonSerializer.Serialize(Detresult));
             Console.WriteLine("\r\n");
-
-            var (target_y, rect) = DDDDOCR.SlideMatch(tg, bg);
+            Console.WriteLine(bg.Width);
+            var (target_y, rect) = DDDDOCR.SlideMatch(tg, bg,44,true);
             Console.WriteLine("SlideMatch滑块的Y坐标为：" + target_y + "\r\nSlideMatch滑块缺口方框为:" + JsonSerializer.Serialize<Rect>(rect));
             bg.Rectangle(rect, new Scalar(0, 0, 255), 2);
             Cv2.ImShow("SlideMatch", bg);
